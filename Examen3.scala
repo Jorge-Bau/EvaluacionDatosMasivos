@@ -8,16 +8,7 @@ import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
 import org.apache.spark.ml.feature.IndexToString
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
-/*
-val spar = SparkSession.builder().getOrCreate()
 
-val df = spark.read.option("header", "true").option("inferSchema","true")csv("Iris.csv")
-
-val newNames = Seq("SepalLength", "SepalWidth", "PetalLength", "PetalWidth", "Label")
-val dfRenamed = df.toDF(newNames:_*)
-
-dfRenamed.printSchema
-*/
 val spark = SparkSession.builder.master("local[*]").getOrCreate()
 
 val df = spark.read.option("inferSchema","true").csv("Iris").toDF(
