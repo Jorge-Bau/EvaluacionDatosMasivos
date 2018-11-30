@@ -39,7 +39,6 @@ def autobot(in: Initial) = Final(
   )
 
 val data = assembler.transform(iris.as[Initial].map(autobot))
-data.show()
 
 
 import org.apache.spark.ml.clustering.KMeans
@@ -57,16 +56,14 @@ println("Cluster Centers: ")
 model.clusterCenters.foreach(println)
 
 import org.apache.spark.mllib.clustering.BisectingKMeans
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
 
-// Loads and parses data
-def parse(line: String): Vector = Vectors.dense(line.split(" ").map(_.toDouble))
+val bkm = new BisectingKMeans().setK(2).setSeed(1)
+    val model = bkm.fit(data)
 
-// Clustering the data into 6 clusters by BisectingKMeans.
-val bkm = new BisectingKMeans().setK(6)
-val model = bkm.run(data)
+    // Make predictions
+    val predictions = model.transform(data)
 
-// Show the compute cost and the cluster centers
-model.clusterCenters.zipWithIndex.foreach { case (center, idx) =>
-  println(s"Cluster Center ${idx}: ${center}")
-}
+    // Shows the result.
+    println("Cluster Centers: ")
+    val centers = model.clusterCenters
+centers.foreach(println)
